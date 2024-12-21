@@ -1,11 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
+
+
 const firebaseConfig = {
-    apiKey: "AIzaSyARaf3UPiSmPHwHn0185RmilpixU6ObOBo",
-    authDomain: "testsit-9c5f3.firebaseapp.com",
-    projectId: "testsit-9c5f3",
-    storageBucket: "testsit-9c5f3.firebasestorage.app",
+    apiKey: "AIzaSyCi2OcSF6WKz40I3ShLMLifph84jQQiX_c",
+    authDomain: "festes-catalanes.firebaseapp.com",
+    projectId: "festes-catalanes",
+    storageBucket: "festes-catalanes.firebasestorage.app",
     messagingSenderId: "895995371650",
     appId: "1:895995371650:web:49ed788debc2d0ce6e549b",
 };
