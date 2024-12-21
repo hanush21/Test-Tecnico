@@ -1,12 +1,17 @@
-import {BrowserRouter as Route, Routes, Router,  } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
+import Clients from "./pages/Clients"
+import ClientDetails from "./pages/ClientDetails"
 
 
 const Router = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+
+
+    return (
+        <Routes>
+            <Route path="/" element={<Clients />} />
+            <Route path="details" element={<ClientDetails />} />
+        </Routes>
+    )
 }
 
 export default Router
