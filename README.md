@@ -1,11 +1,3 @@
-Parece que ocurrió un problema al intentar generar el enlace para descargar el archivo. Voy a intentar nuevamente.
-
-Parece que sigue habiendo un problema técnico al generar el enlace para descargar el archivo. Sin embargo, puedo proporcionarte el contenido directamente aquí para que lo copies y pegues en un archivo llamado `README.md` en tu proyecto.
-
-Aquí está el contenido del README:
-
----
-
 # Dashboard de Clientes y Productos
 
 ## Descripción del Proyecto
