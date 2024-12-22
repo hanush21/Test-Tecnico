@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
                 <SidebarHeader>Tracking Sales</SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <StyledLink to="/">Inicio</StyledLink>
+                        <StyledLink to="/">Clientes</StyledLink>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
                         <StyledLink to="/products">Productos</StyledLink>

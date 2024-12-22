@@ -11,7 +11,6 @@ Este proyecto es una aplicación web desarrollada en React para la administraci�
 - **Recharts**: Para la generación de gráficas interactivas.
 
 ## Instalación
-Sigue los pasos a continuación para instalar y ejecutar la aplicación localmente:
 
 ### Prerrequisitos
 - Node.js (v16 o superior)
@@ -21,7 +20,7 @@ Sigue los pasos a continuación para instalar y ejecutar la aplicación localmen
 1. **Clonar el repositorio:**
    ```bash
    git clone https://github.com/hanush21/Test-Tecnico.git
-   cd dashboard-clientes
+   cd Test-Tecnico
    ```
 
 2. **Instalar dependencias:**
@@ -31,7 +30,7 @@ Sigue los pasos a continuación para instalar y ejecutar la aplicación localmen
 
 3. **Iniciar la aplicación:**
    ```bash
-   npm start
+   npm run dev
    ```
    La aplicación estará disponible en `http://localhost:5173/`.
 
@@ -61,7 +60,7 @@ Sigue los pasos a continuación para instalar y ejecutar la aplicación localmen
   - Ve a la pestaña "Estadísticas" para explorar las gráficas.
 
 ## Gestión del Estado con Zustand
-- Usamos Zustand en lugar de Context API para gestionar el estado global de la aplicación debido a su:
+- Use Zustand en lugar de Context API para gestionar el estado global de la aplicación debido a su:
   - **Simplicidad:** La sintaxis es más limpia y fácil de mantener.
   - **Rendimiento:** Evita renderizados innecesarios de componentes.
 - **Implementación:**
