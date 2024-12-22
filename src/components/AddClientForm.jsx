@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getClients, addClient } from "../services/clientService";
 import useClientStore from "../store/clientStore";
+import AddProduct from "./AddProduct";
 
 
 
@@ -9,6 +10,8 @@ const AddClientForm = ({ onClose }) => {
     const { clients, setClients } = useClientStore();
     const [isAddingProduct, setIsAddingProduct] = useState(false);
     const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
+    const [showAddProduct, setShowAddProduct] = useState(false);
+    const [error, setError] = useState("");
     const [clientData, setClientData] = useState({
         givenName: "",
         familyName1: "",
@@ -28,9 +31,6 @@ const AddClientForm = ({ onClose }) => {
         soldAt: "",
     });
 
-    const [selectedClient, setSelectedClient] = useState("");
-    const [searchClient, setSearchClient] = useState("");
-
     useEffect(() => {
         const fetchClients = async () => {
             const data = await getClients();
@@ -44,52 +44,65 @@ const AddClientForm = ({ onClose }) => {
         setClientData({ ...clientData, [name]: value });
     };
 
-    const handleProductChange = (e) => {
-        const { name, value } = e.target;
-        setProductData({ ...productData, [name]: value });
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     };
+    
+    const isValidPhone = (phone) => {
+        const phoneRegex = /^\d{9}$/; 
+        return phoneRegex.test(phone);
+    };
+    
 
     const handleSubmitClient = async (e) => {
         e.preventDefault();
+    
+        const validations = {
+            docType: !clientData.docType && "Por favor, seleccione un tipo de documento.",
+            docNum: !clientData.docNum.trim() && "Por favor, ingrese el número de documento.",
+            email: (!clientData.email.trim() || !isValidEmail(clientData.email)) && "Por favor, ingrese un email válido.",
+            givenName: !clientData.givenName.trim() && "Por favor, ingrese el nombre del cliente.",
+            familyName1: !clientData.familyName1.trim() && "Por favor, ingrese el apellido del cliente.",
+            phone: (!clientData.phone.trim() || !isValidPhone(clientData.phone)) && "Por favor, ingrese un número de teléfono válido."
+        };
+    
+        const error = Object.values(validations).find(val => val);
+        if (error) {
+            setError(error);
+            return;
+        }
+    
         try {
             await addClient({ ...clientData, products: [] });
             const updatedClients = await getClients();
             setClients(updatedClients);
-            setShowConfirmationPopup(true); // Mostrar el popup de confirmación
+            setShowConfirmationPopup(true);
+            resetForm();
         } catch (error) {
             console.error("Error al agregar cliente:", error);
+            setError("Hubo un error al agregar el cliente. Por favor, inténtelo de nuevo.");
         }
     };
 
-    const handleSubmitProduct = async (e) => {
-        e.preventDefault();
-        try {
-            const clientToUpdate = clients.find(
-                (client) => client.customerId === selectedClient
-            );
+    const resetForm = () => {
+        setClientData({
+            givenName: "",
+            familyName1: "",
+            email: "",
+            phone: "",
+            docType: "nif",
+            docNum: "",
+            customerId: "",
+        });
+    };
+    
 
-            if (!clientToUpdate) {
-                alert("No se encontró el cliente seleccionado.");
-                return;
-            }
-
-            const updatedClient = {
-                ...clientToUpdate,
-                products: [...(clientToUpdate.products || []), productData],
-            };
-
-            await addClient(updatedClient); // Simula la actualización del cliente con productos
-            const updatedClients = await getClients();
-            setClients(updatedClients);
-            onClose();
-        } catch (error) {
-            console.error("Error al agregar producto:", error);
-        }
+    const handleAddProduct = () => {
+        setIsAddingProduct(true);
+        setShowAddProduct(true);
     };
 
-    const filteredClients = clients.filter((client) =>
-        client.givenName.toLowerCase().includes(searchClient.toLowerCase())
-    );
 
     return (
         <FormContainer>
@@ -145,79 +158,16 @@ const AddClientForm = ({ onClose }) => {
                         required
                     />
                     <SubmitButton onClick={handleSubmitClient}>Agregar Cliente</SubmitButton> <br/>
-                    <SubmitButton onClick={handleSubmitClient}>Agregar Producto a cliente</SubmitButton>
+                    <SubmitButton onClick={handleAddProduct}>Agregar Producto a cliente</SubmitButton>
+                    {showAddProduct && <AddProduct onClose={() => setShowAddProduct(false)} />}
                 </>
             ) : (
-                <>
-                    <h2>Agregar Producto</h2>
-                    <FormField
-                        type="text"
-                        placeholder="Buscar cliente..."
-                        value={searchClient}
-                        onChange={(e) => setSearchClient(e.target.value)}
-                    />
-                    <SelectField
-                        value={selectedClient}
-                        onChange={(e) => setSelectedClient(e.target.value)}
-                    >
-                        <option value="">Selecciona un cliente</option>
-                        {filteredClients.map((client) => (
-                            <option key={client.customerId} value={client.customerId}>
-                                {client.givenName} {client.familyName1}
-                            </option>
-                        ))}
-                    </SelectField>
-                    <FormField
-                        type="text"
-                        name="productName"
-                        placeholder="Nombre del Producto"
-                        value={productData.productName}
-                        onChange={handleProductChange}
-                        required
-                    />
-                    <SelectField
-                        name="productTypeName"
-                        value={productData.productTypeName}
-                        onChange={handleProductChange}
-                    >
-                        <option value="">Seleccione tipo</option>
-                        <option value="ftth">Fibra</option>
-                        <option value="4G">Móvil</option>
-                    </SelectField>
-                    <FormField
-                        type="number"
-                        name="mbSpeed"
-                        placeholder="Velocidad en MB"
-                        value={productData.mbSpeed}
-                        onChange={handleProductChange}
-                    />
-                    <FormField
-                        type="number"
-                        name="gbData"
-                        placeholder="Datos en GB"
-                        value={productData.gbData}
-                        onChange={handleProductChange}
-                    />
-                    <FormField
-                        type="text"
-                        name="numeracioTerminal"
-                        placeholder="Número de Terminal"
-                        value={productData.numeracioTerminal}
-                        onChange={handleProductChange}
-                    />
-                    <FormField
-                        type="date"
-                        name="soldAt"
-                        placeholder="Fecha de Venta"
-                        value={productData.soldAt}
-                        onChange={handleProductChange}
-                        required
-                    />
-                    <SubmitButton onClick={handleSubmitProduct}>
-                        Agregar Producto
-                    </SubmitButton>
-                </>
+                <AddProduct 
+                onClose={()=> onClose() }
+                />
             )}
+            {error && <div style={{color: 'red'}}>{error}</div>}
+
 
             
             {showConfirmationPopup && (
@@ -255,7 +205,7 @@ const FormContainer = styled.div`
 const FormField = styled.input`
   padding: 10px;
   margin: 10px 0;
-  width: 100%;
+  width: 96%;
   border: 1px solid #ddd;
   border-radius: 5px;
 `;
@@ -270,13 +220,13 @@ const SelectField = styled.select`
 
 const SubmitButton = styled.button`
   padding: 10px;
-  background-color: #28a745;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   &:hover {
-    background-color: #218838;
+    background-color: #0455ac;
   }
 `;
 

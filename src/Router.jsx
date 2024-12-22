@@ -1,16 +1,21 @@
 import { Route, Routes } from "react-router-dom"
 import Clients from "./pages/Clients"
-import ClientDetails from "./pages/ClientDetails"
+import ProductsPage from "./pages/ProductsPage"
+import Layout from "./navigation/Layout"
+import StatsPage from "./pages/StatsPage"
 
 
 const Router = () => {
 
 
     return (
-        <Routes>
-            <Route path="/" element={<Clients />} />
-            <Route path="details" element={<ClientDetails />} />
-        </Routes>
+        <Layout>
+            <Routes>
+                <Route path="/" element={<Clients />} />
+                <Route path="products" element={<ProductsPage />} />
+                <Route path="stats" element={<StatsPage/>} />
+            </Routes>
+        </Layout>
     )
 }
 
