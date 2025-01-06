@@ -32,6 +32,7 @@ export default Layout;
 const LayoutContainer = styled.div`
   display: flex;
   height: 100vh;
+  background-color: #242424;
 `;
 
 const Sidebar = styled.div`
